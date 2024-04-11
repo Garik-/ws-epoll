@@ -23,6 +23,9 @@ type Service struct {
 }
 
 func New(config *Config) *Service {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/", wsUpgrade)
+
 	return &Service{
 		server: &http.Server{
 			Addr:              config.Addr,
@@ -30,7 +33,7 @@ func New(config *Config) *Service {
 			WriteTimeout:      writeTimeout,
 			IdleTimeout:       idleTimeout,
 			ReadHeaderTimeout: readHeaderTimeout,
-			Handler:           http.HandlerFunc(wsUpdate),
+			Handler:           mux,
 		},
 	}
 }

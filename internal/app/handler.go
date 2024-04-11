@@ -3,9 +3,13 @@ package app
 import (
 	"net/http"
 
-	"github.com/Garik-/ws-epoll/internal/zlog"
+	"github.com/gobwas/ws"
 )
 
-func wsUpdate(_ http.ResponseWriter, _ *http.Request) {
-	zlog.Debug("trlolo")
+func wsUpgrade(w http.ResponseWriter, r *http.Request) {
+	_, _, _, err := ws.UpgradeHTTP(r, w)
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusInternalServerError),
+			http.StatusInternalServerError)
+	}
 }
