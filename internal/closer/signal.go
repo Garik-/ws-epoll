@@ -11,12 +11,10 @@ func CloseOnSignal(ctx context.Context, signals ...os.Signal) error {
 	done := make(chan os.Signal, 1)
 	signal.Notify(done, signals...)
 
-	for {
-		select {
-		case <-ctx.Done():
-			return Close()
-		case <-done:
-			return Close()
-		}
+	select {
+	case <-ctx.Done():
+	case <-done:
 	}
+
+	return Close()
 }

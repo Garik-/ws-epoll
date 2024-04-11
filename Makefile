@@ -18,7 +18,7 @@ build:	install ## build binary
 	@$(foreach APP, $(APPS), $(MAKE) -C $(APPS_DIR)/$(APP) build ;)
 
 lint: bootstrap ## run golangci-linter
-	@$(foreach APP, $(APPS), $(GOLANGCI_LINT_BIN) run $(APPS_DIR)/$(APP) ;)
+	$(GOLANGCI_LINT_BIN) run ./...
 
 env-up:
 	@docker-compose up -d
