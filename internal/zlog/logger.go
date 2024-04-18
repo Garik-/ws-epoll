@@ -22,7 +22,7 @@ var (
 
 var defaultLogger *Logger
 
-func init() { //nolint:gochecknoinits
+func init() {
 	l, _ := zap.NewDevelopment()
 	defaultLogger = l
 }

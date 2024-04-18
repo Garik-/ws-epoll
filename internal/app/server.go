@@ -52,5 +52,9 @@ func (s *Service) Close() error {
 	ctx, cancel := context.WithTimeout(context.Background(), shutdownTimeout)
 	defer cancel()
 
-	return s.server.Shutdown(ctx)
+	if err := s.server.Shutdown(ctx); err != nil {
+		return fmt.Errorf("service close error: %w", err)
+	}
+
+	return nil
 }

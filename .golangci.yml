@@ -32,6 +32,7 @@ linters:
     # - gofumpt
     - golint
     # - gci
+    - gochecknoinits
 
 linters-settings:
   errcheck:
