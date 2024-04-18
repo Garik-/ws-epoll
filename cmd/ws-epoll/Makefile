@@ -7,7 +7,7 @@ ID := 1
 
 build:
 	@echo "=> building $(APP) binary"
-	@$(GO_FLAGS) $(GO_LDFLAGS) $(GO) build -o $(BIN_DIR)/$(APP) .
+	$(GO) build -trimpath -ldflags "${GO_LDFLAGS}" -o $(BIN_DIR)/$(APP) .
 
 run: build
 	@echo "=> run $(APP) $(VERSION)"

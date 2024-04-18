@@ -1,6 +1,6 @@
 include includes.mk
 
-PHONY: install build lint env-up env-down run help
+PHONY: install build lint env-up env-down run help vet test
 
 APPS ?= ws-epoll
 
@@ -11,14 +11,26 @@ ifneq (,$(wildcard ./.env))
     export
 endif
 
+export CGO_ENABLED=0
+
+vet: 
+	@go vet ./...
+
 install: ## download dependencies
 	@go mod download > /dev/null >&1
 
 build:	install ## build binary
 	@$(foreach APP, $(APPS), $(MAKE) -C $(APPS_DIR)/$(APP) build ;)
 
-lint: bootstrap ## run golangci-linter
-	$(GOLANGCI_LINT_BIN) run ./...
+lint: bootstrap vet ## run golangci-linter
+	$(GOLANGCI_LINT_BIN) run
+	
+
+test: vet
+	@CGO_ENABLED=1 go test -v -race -count 1 \
+				-cover -coverpkg="./..." -coverprofile="cover.out" \
+				"./..."
+ 
 
 env-up:
 	@docker-compose up -d

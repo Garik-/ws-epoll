@@ -9,13 +9,12 @@ GOLANGCI_LINT_VERSION := v1.57.2
 
 GIT_BRANCH ?= $(shell git rev-parse --abbrev-ref HEAD)
 GIT_HASH ?= $(shell git rev-parse --short HEAD)
-GIT_TAG_HASH ?=
 
 VERSION = $(GIT_BRANCH)-$(GIT_HASH)
 
 GO = go
 GO_FLAGS ?=
-GO_LDFLAAGS ?= -ldflags="-X 'main.Version=$(VERSION)'"
+GO_LDFLAGS ?= -w -s -X 'main.Version=$(VERSION)'
 
 # go_install_util make install a binary from a golang module.
 # Parameters:
