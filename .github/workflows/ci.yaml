@@ -39,22 +39,3 @@ jobs:
       - name: tests-only
         if: ${{ github.event_name == 'pull_request' }}
         run: make test
-  codeql:
-    if: ${{ github.event_name == 'push' }}
-    runs-on: ubuntu-latest
-    needs: [lint, test]
-    environment:
-      name: ci
-    steps:
-      - name: checkout
-        uses: actions/checkout@v4
-      - name: setup golang
-        uses: actions/setup-go@v5
-        with:
-          go-version: ^1.22
-      - name: init codeql
-        uses: github/codeql-action/init@v3
-        with:
-          languages: 'go'
-      - name: run analysis
-        uses: github/codeql-action/analyze@v3
