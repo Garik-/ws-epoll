@@ -20,7 +20,7 @@ linters:
     # - inamedparam
     # - exhaustive
     - interfacer
-    # - varnamelen
+    - varnamelen
     - scopelint
     - deadcode
     - depguard

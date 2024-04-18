@@ -2,6 +2,11 @@ package main
 
 import (
 	"context"
+	"flag"
+	"fmt"
+	"os"
+	"path/filepath"
+	"strings"
 	"syscall"
 
 	"github.com/Garik-/ws-epoll/internal/app"
@@ -10,8 +15,45 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
+const (
+	appName     = "ws-epoll"
+	defaultAddr = ":3133"
+)
+
+var (
+	fAddr string
+	fHelp bool
+)
+
+func setupFlags() {
+	flag.StringVar(&fAddr, "addr", defaultAddr, "server address")
+	flag.BoolVar(&fHelp, "help", false, "show this help")
+	flag.Usage = usage
+}
+
+func usage() {
+	var sb strings.Builder
+
+	fmt.Fprintf(&sb, "%s - test 1 million connections, usage:\n\n", appName)
+	fmt.Fprintf(&sb, "%s [flags]\n\n", filepath.Base(os.Args[0]))
+	fmt.Fprint(&sb, "possible flags with default values:\n\n")
+
+	_, _ = os.Stderr.WriteString(sb.String())
+
+	flag.PrintDefaults()
+}
+
 func main() {
 	defer zlog.Sync()
+
+	setupFlags()
+	flag.Parse()
+
+	if fHelp {
+		usage()
+
+		return
+	}
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
@@ -23,7 +65,7 @@ func main() {
 
 	errGroup.Go(func() error {
 		srv := app.New(&app.Config{
-			Addr: ":3133",
+			Addr: fAddr,
 		})
 		closer.Add(srv)
 

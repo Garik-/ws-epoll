@@ -11,4 +11,4 @@ build:
 
 run: build
 	@echo "=> run $(APP) $(VERSION)"
-	@$(BIN_DIR)/$(APP) --version=$(VERSION) --service=$(APP) --id=$(ID)
+	@$(BIN_DIR)/$(APP)
